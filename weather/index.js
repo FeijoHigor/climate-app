@@ -63,16 +63,27 @@ const correctNumber = (number) => {
 function updateHour(placeTime) {
     const date = new Date()
 
-    console.log(date.getSeconds(), placeTime)
-
-    const day = date.getUTCDate()
-    console.log(day)
+    var day = date.getUTCDate()
+    const month = date.getUTCMonth()
+    const year = date.getUTCFullYear()
 
     const hourCount = date.getUTCHours() + (placeTime / -60 / -60) + 24
     const hour = hourCount >= 24 ? hourCount - 24 : hourCount
     const minute = date.getUTCMinutes()
     const second = date.getUTCSeconds()
     outHour.innerText = `${correctNumber(hour)}:${correctNumber(minute)}:${correctNumber(second)}`
+
+    if(date.getUTCHours() + (placeTime / -60 / -60) < 0) {
+        console.log('dia a menos')
+        day--
+    }else if(date.getUTCHours() + (placeTime / -60 / -60) > 24) {
+        console.log('dia a mais')
+        day++
+    }else if(date.getUTCHours() + (placeTime / -60 / -60) > 0 && date.getUTCHours() + (placeTime / -60 / -60) < 24) {
+        console.log('dia utc')
+    }
+
+    outDate.innerText = `${correctNumber(day)}/${correctNumber(month)}/${correctNumber(year)}`
 
 }
 
