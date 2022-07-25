@@ -7,7 +7,7 @@ const outMax = document.getElementsByClassName('max-temp')[0]
 const outHour = document.getElementsByClassName('hours')[0]
 const outDate = document.getElementsByClassName('date')[0]
 
-const optionsOne = {
+const optionsTwo = {
 	"method": 'get',
 	"headers": {
 		'X-RapidAPI-Key': 'c03f8b64f3msh3f156fdaf0c117dp177302jsn4e4d644ce2a5',
@@ -15,7 +15,7 @@ const optionsOne = {
 	}
 };
 
-const optionsTwo = {
+const options = {
 	"method": 'GET',
 	"headers": {
 		'X-RapidAPI-Key': 'd3375f5e49mshdbee8e8f75dff43p1bd2e5jsnc82b02f566ec',
@@ -23,11 +23,8 @@ const optionsTwo = {
 	}
 };
 
-const fetchS = `https://community-open-weather-map.p.rapidapi.com/weather?q=${place.value}&lat=0&lon=0&id=2172797&lang=null&units=metric&mode=json`
-
-
-async function test(fetchS, optionsS) {
-    const test1 = await fetch(fetchS, optionsS)
+async function test() {
+    const test1 = await fetch(`https://community-open-weather-map.p.rapidapi.com/weather?q=${place.value}&lat=0&lon=0&id=2172797&lang=null&units=metric&mode=json`, options)
 
     const test2 = await test1.text()
 
@@ -38,26 +35,15 @@ async function test(fetchS, optionsS) {
     }else if (res['cod'] == '200') {
         console.log('Cidade encontrada', res.name)
 
-        const date = new Date()
-        
         countHour(res.timezone)
-
-        const hourCount = date.getUTCHours() + (res.timezone / -60 / -60) + 24
-        const hour = hourCount >= 24 ? hourCount - 24 : hourCount
-        const day = date.getUTCDate()
-        const month = date.getUTCMonth() + 1
-        const year = date.getUTCFullYear()
 
         place.value = res.name
         outTemp.innerText = correctNumber(res.main.temp.toFixed(1))
         outFell.innerText = correctNumber(res.main.feels_like.toFixed(1))
         outMin.innerText = correctNumber(res.main.temp_min.toFixed(1))
         outMax.innerText = correctNumber(res.main.temp_max.toFixed(1))
-    }else if(test1['status'] == '429') {
-        console.log('too many requests', res)
-        return test1['status']
     } else {
-        console.log('Houve algum erro :(', test1['status'])
+        console.log('Houve algum erro :(')
     }
 
     return res
@@ -103,9 +89,7 @@ function countHour(placeTime) {
 }
 
 function stopInterval() {
-    if(inter) {
-        clearInterval(inter)
-    }
+    clearInterval(inter)
 }
 
 
@@ -118,7 +102,5 @@ document.addEventListener('keydown', async (e) => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const resOne = await test(fetchS, optionsOne)
-    const resTwo = await test(fetchS, optionsTwo)
-    console.log(resOne == '429' ? resTwo : resOne)
+    console.log(await test())
 })
