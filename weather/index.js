@@ -7,7 +7,7 @@ const outMax = document.getElementsByClassName('max-temp')[0]
 const outHour = document.getElementsByClassName('hours')[0]
 const outDate = document.getElementsByClassName('date')[0]
 
-const options = {
+const optionsOne = {
 	"method": 'get',
 	"headers": {
 		'X-RapidAPI-Key': 'c03f8b64f3msh3f156fdaf0c117dp177302jsn4e4d644ce2a5',
@@ -15,8 +15,19 @@ const options = {
 	}
 };
 
-async function test() {
-    const test1 = await fetch(`https://community-open-weather-map.p.rapidapi.com/weather?q=${place.value}&lat=0&lon=0&id=2172797&lang=null&units=metric&mode=json`, options)
+const optionsTwo = {
+	"method": 'GET',
+	"headers": {
+		'X-RapidAPI-Key': 'd3375f5e49mshdbee8e8f75dff43p1bd2e5jsnc82b02f566ec',
+		'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com'
+	}
+};
+
+const fetchS = `https://community-open-weather-map.p.rapidapi.com/weather?q=${place.value}&lat=0&lon=0&id=2172797&lang=null&units=metric&mode=json`
+
+
+async function test(fetchS, optionsS) {
+    const test1 = await fetch(fetchS, optionsS)
 
     const test2 = await test1.text()
 
@@ -37,16 +48,16 @@ async function test() {
         const month = date.getUTCMonth() + 1
         const year = date.getUTCFullYear()
 
-        //console.log(day < 10 ? "0"+day : day, month < 10 ? "0"+month : month, year)
-        outDate.innerText = `${day < 10 ? "0"+day : day}/${month < 10 ? "0"+month : month}/${year}`
-
         place.value = res.name
         outTemp.innerText = correctNumber(res.main.temp.toFixed(1))
         outFell.innerText = correctNumber(res.main.feels_like.toFixed(1))
         outMin.innerText = correctNumber(res.main.temp_min.toFixed(1))
         outMax.innerText = correctNumber(res.main.temp_max.toFixed(1))
+    }else if(test1['status'] == '429') {
+        console.log('too many requests', res)
+        return test1['status']
     } else {
-        console.log('Houve algum erro :(')
+        console.log('Houve algum erro :(', test1['status'])
     }
 
     return res
@@ -68,7 +79,7 @@ function updateHour(placeTime) {
     const year = date.getUTCFullYear()
 
     const hourCount = date.getUTCHours() + (placeTime / -60 / -60) + 24
-    const hour = hourCount >= 24 ? hourCount - 24 : hourCount
+    const hour = hourCount - 24 >= 24 ? hourCount - 48 : hourCount >= 24 ? hourCount - 24 : hourCount
     const minute = date.getUTCMinutes()
     const second = date.getUTCSeconds()
     outHour.innerText = `${correctNumber(hour)}:${correctNumber(minute)}:${correctNumber(second)}`
@@ -92,7 +103,9 @@ function countHour(placeTime) {
 }
 
 function stopInterval() {
-    clearInterval(inter)
+    if(inter) {
+        clearInterval(inter)
+    }
 }
 
 
@@ -105,5 +118,7 @@ document.addEventListener('keydown', async (e) => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log(await test())
+    const resOne = await test(fetchS, optionsOne)
+    const resTwo = await test(fetchS, optionsTwo)
+    console.log(resOne == '429' ? resTwo : resOne)
 })
