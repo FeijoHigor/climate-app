@@ -7,14 +7,6 @@ const outMax = document.getElementsByClassName('max-temp')[0]
 const outHour = document.getElementsByClassName('hours')[0]
 const outDate = document.getElementsByClassName('date')[0]
 
-const optionsTwo = {
-	"method": 'get',
-	"headers": {
-		'X-RapidAPI-Key': '167535198933c22e24f233fd901b70b5',
-		'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com'
-	}
-};
-
 const options = {
 	"method": 'GET'
 };
