@@ -10,21 +10,17 @@ const outDate = document.getElementsByClassName('date')[0]
 const optionsTwo = {
 	"method": 'get',
 	"headers": {
-		'X-RapidAPI-Key': 'c03f8b64f3msh3f156fdaf0c117dp177302jsn4e4d644ce2a5',
+		'X-RapidAPI-Key': '167535198933c22e24f233fd901b70b5',
 		'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com'
 	}
 };
 
 const options = {
-	"method": 'GET',
-	"headers": {
-		'X-RapidAPI-Key': 'd3375f5e49mshdbee8e8f75dff43p1bd2e5jsnc82b02f566ec',
-		'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com'
-	}
+	"method": 'GET'
 };
 
 async function test() {
-    const test1 = await fetch(`https://community-open-weather-map.p.rapidapi.com/weather?q=${place.value}&lat=0&lon=0&id=2172797&lang=null&units=metric&mode=json`, options)
+    const test1 = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place.value}&APPID=167535198933c22e24f233fd901b70b5`, options)
 
     const test2 = await test1.text()
 
@@ -37,11 +33,17 @@ async function test() {
 
         countHour(res.timezone)
 
+        const temp = res.main.temp - 273.15
+        const feels_like = res.main.feels_like - 273.15
+        const temp_min = res.main.temp_min - 273.15
+        const temp_max = res.main.temp_max - 273.15
+
+
         place.value = res.name
-        outTemp.innerText = correctNumber(res.main.temp.toFixed(1))
-        outFell.innerText = correctNumber(res.main.feels_like.toFixed(1))
-        outMin.innerText = correctNumber(res.main.temp_min.toFixed(1))
-        outMax.innerText = correctNumber(res.main.temp_max.toFixed(1))
+        outTemp.innerText = correctNumber(temp.toFixed(1))
+        outFell.innerText = correctNumber(feels_like.toFixed(1))
+        outMin.innerText = correctNumber(temp_min.toFixed(1))
+        outMax.innerText = correctNumber(temp_max.toFixed(1))
     } else {
         console.log('Houve algum erro :(')
     }
