@@ -1,5 +1,8 @@
 const place = document.querySelectorAll('.place')[0]
 
+const contentTag = document.getElementsByClassName('clear-not-found')
+const notFoundMsg = document.getElementsByClassName('not-found')[0]
+
 const outTemp = document.getElementsByClassName('real-temp')[0] 
 const outFell = document.getElementsByClassName('feel-temp')[0]
 const outMin = document.getElementsByClassName('min-temp')[0]
@@ -12,7 +15,7 @@ const options = {
 };
 
 async function test() {
-    const test1 = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place.value}&APPID=167535198933c22e24f233fd901b70b5`, options)
+    const test1 = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place.textContent}&APPID=167535198933c22e24f233fd901b70b5`, options)
 
     const test2 = await test1.text()
 
@@ -20,6 +23,9 @@ async function test() {
 
     if(res['cod'] == '404') {
         console.log('Cidade não encontrada')
+        contentTag[0].style.display = 'none'
+        contentTag[1].style.display = 'none'
+        notFoundMsg.style.display = 'flex'
     }else if (res['cod'] == '200') {
         console.log('Cidade encontrada', res.name)
 
@@ -31,7 +37,7 @@ async function test() {
         const temp_max = res.main.temp_max - 273.15
 
 
-        place.value = res.name
+        place.textContent = res.name
         outTemp.innerText = correctNumber(temp.toFixed(1))
         outFell.innerText = correctNumber(feels_like.toFixed(1))
         outMin.innerText = correctNumber(temp_min.toFixed(1))
@@ -55,7 +61,7 @@ function updateHour(placeTime) {
     const date = new Date()
 
     var day = date.getUTCDate()
-    const month = date.getUTCMonth()
+    const month = date.getUTCMonth() + 1
     const year = date.getUTCFullYear()
 
     const hourCount = date.getUTCHours() + (placeTime / -60 / -60) + 24
@@ -89,6 +95,7 @@ function stopInterval() {
 
 document.addEventListener('keydown', async (e) => {
     if(e.key === "Enter") {
+        place.blur()
         stopInterval()
         console.log(await test())
     }

@@ -6,36 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Clima</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="content">
-        <header>
-            <div>
-                <span class="date">00/00/0000</span>
-            </div>
-            <section>
-                <h1>Em <input class="place" type="text" value="São Paulo" /> está</h1>
-            </section>
-        </header>
-        <main>
-            <section>
-                <span class="real-temp">00,0</span>°C com sensação de <span class="feel-temp">00,0</span>°C
-            </section>
-            <section>
-                <div>
-                    Mín <span class="min-temp">00,0</span>°C | Máx <span class="max-temp">00,0</span>°C
+    <div class="image-background"><div class="black-background"></div></div>
+    <div class='all'>
+        <div class="content">
+            <header>
+                <div style="margin-bottom: 20px;" class="clear-not-found">
+                    <span class="date">00/00/0000</span>
                 </div>
-                <div>
-                    Hora <span class="hours">00:00:00</span>
-                </div>
-            </section>
+                <section>
+                    <h1>Em <span class="place" role="textbox" contenteditable  >São Paulo</span>&nbspestá</h1>
+                </section>
+            </header>
+            <main class="clear-not-found">
+                <section>
+                    <span class="real-temp">00,0</span>°C com sensação de <span class="feel-temp">00,0</span>°C
+                </section>
+                <section>
+                    <div>
+                        Mín <span class="min-temp">00,0</span>°C | Máx <span class="max-temp">00,0</span>°C
+                    </div>
+                    <div>
+                        Hora <span class="hours">00:00:00</span>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <main class="not-found">
+            <span class="not-found-1">Lugar não encontrado.</span>
+            <span class="not-found-2">Verifique o nome da cidade e assentos.</span>
         </main>
-        <footer>
-            <section class="sky-drawing">
-    
-            </section>
-        </footer>
-    </div>
+    </div> 
     <script src="./index.js"></script>
 </body>
 </html>
