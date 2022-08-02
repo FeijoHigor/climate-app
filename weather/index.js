@@ -10,6 +10,8 @@ const outMax = document.getElementsByClassName('max-temp')[0]
 const outHour = document.getElementsByClassName('hours')[0]
 const outDate = document.getElementsByClassName('date')[0]
 
+const imageBg = document.getElementsByClassName('image-background')[0]
+
 const options = {
 	"method": 'GET'
 };
@@ -26,10 +28,17 @@ async function test() {
         contentTag[0].style.display = 'none'
         contentTag[1].style.display = 'none'
         notFoundMsg.style.display = 'flex'
+        changeBackground(404, {})
     }else if (res['cod'] == '200') {
         console.log('Cidade encontrada', res.name)
 
+        contentTag[0].style.display = 'block'
+        contentTag[1].style.display = 'block'
+        notFoundMsg.style.display = 'none'
+
         countHour(res.timezone)
+
+        changeBackground(200, {timezone: res.timezone, weather: res.weather})
 
         const temp = res.main.temp - 273.15
         const feels_like = res.main.feels_like - 273.15
@@ -48,6 +57,24 @@ async function test() {
 
     return res
 
+}
+
+const changeBackground = (code, params) => {
+    if(code == 404) {
+        imageBg.style.background = "url('./images/not-found.jpg') no-repeat center"
+    }else if(code == 200) {
+        const hourHere = new Date().getUTCHours() + (params.timezone / -60 / -60) + 24
+        const hour = hourHere - 24 >= 24 ? hourHere - 48 : hourHere >= 24 ? hourHere - 24 : hourHere
+        
+        const hourOutput = hour >= 6 && hour <= 14 ? '1' : hour >= 15 && hour <= 18 ? '2' : hour >= 19 || hour <= 5 ? '3' : ''  //1=morning 2=affternoon 3=night
+        
+        const sky = params.weather[0].main
+
+        imageBg.style.background = `url('./images/${sky}-${hourOutput}.jpg') no-repeat center`
+
+        console.log(hour, hourOutput)
+        console.log(sky)
+    }
 }
 
 const correctNumber = (number) => {
@@ -105,3 +132,7 @@ document.addEventListener('keydown', async (e) => {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log(await test())
 })
+
+
+
+// if clouds > 50 ? background clouds
