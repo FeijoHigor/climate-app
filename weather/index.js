@@ -111,7 +111,7 @@ function updateHour(placeTime) {
     if(date.getUTCHours() + (placeTime / -60 / -60) < 0) {
         console.log('dia a menos')
         day--
-    }else if(date.getUTCHours() + (placeTime / -60 / -60) > 24) {
+    }else if(date.getUTCHours() + (placeTime / -60 / -60) >= 24) {
         console.log('dia a mais')
         day++
     }else if(date.getUTCHours() + (placeTime / -60 / -60) > 0 && date.getUTCHours() + (placeTime / -60 / -60) < 24) {
