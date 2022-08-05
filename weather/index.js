@@ -62,6 +62,7 @@ async function test() {
 const changeBackground = (code, params) => {
     if(code == 404) {
         imageBg.style.background = "url('./images/not-found.jpg') no-repeat center"
+        imageBg.style.backgroundSize = 'contain'
     }else if(code == 200) {
         const hourHere = new Date().getUTCHours() + (params.timezone / -60 / -60) + 24
         const hour = hourHere - 24 >= 24 ? hourHere - 48 : hourHere >= 24 ? hourHere - 24 : hourHere
@@ -69,6 +70,16 @@ const changeBackground = (code, params) => {
         const hourOutput = hour >= 6 && hour <= 14 ? '1' : hour >= 15 && hour <= 18 ? '2' : hour >= 19 || hour <= 5 ? '3' : ''  //1=morning 2=affternoon 3=night
         
         const sky = params.weather[0].main
+        var skyOutput = ''
+
+        if(sky == 'Rain' || sky == 'Drizzle' || sky == 'Snow' || sky == 'Thunderstorm') {
+            skyOutput = 'rain'
+        }else if(sky == 'Clear') {
+            skyOutput = 'clear'
+        }else if(sky == 'Clouds' || params.weather[0].id > 700 && params.weather[0].id < 800) {
+            skyOutput = 'clouds'
+        }
+
 
         imageBg.style.background = `url('./images/${sky}-${hourOutput}.jpg') no-repeat center`
 
@@ -132,7 +143,3 @@ document.addEventListener('keydown', async (e) => {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log(await test())
 })
-
-
-
-// if clouds > 50 ? background clouds
