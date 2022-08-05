@@ -116,6 +116,7 @@ function updateHour(placeTime) {
         day++
     }else if(date.getUTCHours() + (placeTime / -60 / -60) > 0 && date.getUTCHours() + (placeTime / -60 / -60) < 24) {
         console.log('dia utc')
+        console.log(date.getUTCHours() + (placeTime / -60 / -60))
     }
 
     outDate.innerText = `${correctNumber(day)}/${correctNumber(month)}/${correctNumber(year)}`
